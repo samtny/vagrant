@@ -2,3 +2,5 @@ Exec { path => [ '/usr/local/bin/', '/usr/local/sbin', '/usr/bin/', '/usr/sbin/'
 
 include httpd
 include php
+include folders
+include tools
