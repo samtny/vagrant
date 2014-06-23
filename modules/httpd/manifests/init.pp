@@ -5,7 +5,7 @@ class httpd {
     serveradmin => 'vagrant@localhost',
   }
   
-  apache::mod { 'fastcgi': }
+  apache::mod { [ 'fastcgi', 'actions', 'alias' ]: }
 
   #package { 'libapache2-mod-fastcgi':
   #  ensure => installed,
