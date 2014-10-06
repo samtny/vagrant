@@ -6,11 +6,7 @@ package { ["vim", "git"]:
 
 # shared
 
-file { ["/vagrant/data/drupal7-core"]:
-  ensure => directory,
-  owner => "vagrant",
-}
-file { ["/vagrant/data/drupal7-common"]:
+file { ["/vagrant/data", "/vagrant/data/drupal7-core", "/vagrant/data/drupal7-common"]:
   ensure => directory,
   owner => "vagrant",
 }
