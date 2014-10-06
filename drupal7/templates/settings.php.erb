@@ -1,0 +1,29 @@
+<?php
+
+$databases['default']['default'] = array(
+  'driver' => 'mysql',
+  'database' => 'my_ami_<%= @shortname %>',
+  'username' => 'ami_<%= @shortname %>',
+  'password' => 'password',
+  'host' => '127.0.0.1',
+  'prefix' => '',
+  'collation' => 'utf8_general_ci',
+);
+
+// memcache
+$conf['cache_backends'][] = 'sites/all/modules/contrib/memcache/memcache.inc';
+$conf['cache_default_class'] = 'MemCacheDrupal';
+$conf['cache_class_cache_form'] = 'DrupalDatabaseCache';
+$conf['memcache_key_prefix'] = '<%= @shortname %>';
+$conf['memcache_servers'] = array('localhost:11211' => 'default');
+$conf['memcache_bins'] = array('cache' => 'default');
+
+$update_free_access = FALSE;
+$drupal_hash_salt = '';
+
+ini_set('session.gc_probability', 1);
+ini_set('session.gc_divisor', 100);
+ini_set('session.gc_maxlifetime', 200000);
+ini_set('session.cookie_lifetime', 2000000);
+ini_set('max_input_vars', 10000);
+
