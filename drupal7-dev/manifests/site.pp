@@ -4,9 +4,16 @@ package { ["vim", "git", "drush"]:
   ensure => latest,
 }
 
-# shared
+# vagrant
 
-file { ["/vagrant/data", "/vagrant/data/drupal7-core", "/vagrant/data/drupal7-common"]:
+file { "/share/drupal7-core":
+  ensure => directory,
+  owner => "vagrant",
+  group => "www-data",
+  mode => 2774,
+}
+
+file { "/share/drupal7-common":
   ensure => directory,
   owner => "vagrant",
   group => "www-data",
@@ -21,20 +28,24 @@ file { "/var/www":
   group => "www-data",
   mode => 2774,
 }
+
 file { ["/var/www/drupal7-core"]:
   ensure => symlink,
-  target => "/vagrant/data/drupal7-core",
-  require => File["/vagrant/data/drupal7-core"],
+  target => "/share/drupal7-core",
+  require => File["/var/www", "/share/drupal7-core"],
 }
+
 file { ["/var/www/drupal7-core/docroot", "/var/www/drupal7-core/docroot/sites"]:
   ensure => directory,
   owner => "vagrant",
-  require => File["/var/www"],
+  group => "www-data",
+  require => File["/var/www/drupal7-core"],
 }
+
 file { ["/var/www/drupal7-core/docroot/sites/all"]:
   ensure => symlink,
-  owner => "vagrant",
-  target => "/vagrant/data/drupal7-common",
+  target => "/share/drupal7-common",
+  require => File["/var/www/drupal7-core/docroot/sites", "/share/drupal7-common"],
 }
 
 # site
@@ -56,27 +67,30 @@ define drupal7::drupal7site($shortname) {
     notify => Service["nginx"],
   }
 
-  file { ["/vagrant/data/${name}"]:
+  file { ["/vagrant/${name}"]:
     ensure => directory,
     owner => "vagrant",
+    group => "www-data",
+  }
+
+  file { ["/vagrant/${name}/settings.php"]:
+    ensure => present,
+    content => template("settings.php.erb"),
+    owner => "vagrant",
+    group => "www-data",
+  }
+
+  file { ["/vagrant/${name}/files"]:
+    ensure => directory,
+    owner => "vagrant",
+    group => "www-data",
+    require => File["/vagrant/${name}"],
   }
 
   file { ["/var/www/drupal7-core/docroot/sites/${name}"]:
     ensure => symlink,
-    target => "/vagrant/data/${name}",
-  }
-
-  file { ["/var/www/drupal7-core/docroot/sites/${name}/settings.php"]:
-    ensure => present,
-    content => template("settings.php.erb"),
-    owner => "vagrant",
-    require => File["/var/www/drupal7-core/docroot/sites/${name}"];
-  }
-
-  file { ["/var/www/drupal7-core/docroot/sites/${name}/files"]:
-    ensure => directory,
-    owner => "vagrant",
-    require => File["/var/www/drupal7-core/docroot/sites"],
+    target => "/vagrant/${name}",
+    require => File["/vagrant/${name}", "/var/www/drupal7-core/docroot/sites"],
   }
 
   mysql_database { "my_ami_${shortname}":

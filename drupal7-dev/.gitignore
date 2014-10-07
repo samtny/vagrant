@@ -1,3 +1,5 @@
 .vagrant
-data
-
+drupal7-core
+drupal7-common
+*.com
+*.sql
