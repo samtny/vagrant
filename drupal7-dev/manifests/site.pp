@@ -1,6 +1,6 @@
 # utils
 
-package { ["vim", "git"]:
+package { ["vim", "git", "drush"]:
   ensure => latest,
 }
 
@@ -9,6 +9,8 @@ package { ["vim", "git"]:
 file { ["/vagrant/data", "/vagrant/data/drupal7-core", "/vagrant/data/drupal7-common"]:
   ensure => directory,
   owner => "vagrant",
+  group => "www-data",
+  mode => 2774,
 }
 
 # www
@@ -177,6 +179,13 @@ file { "/etc/php5/fpm/php.ini":
 
 # php modules
 
+file { "/etc/php5/conf.d/apc.ini":
+  ensure => present,
+  content => template("apc.ini"),
+  require => Package["php5-fpm"],
+  notify => Service["php5-fpm"],
+}
+
 package { "php5-mysql":
   ensure => latest,
   require => Package["php5-fpm", "mysql-server"],
@@ -188,6 +197,12 @@ package { "php5-memcached":
   require => Package["php5-fpm", "memcached"],
   notify => Service["php5-fpm"],
 }
+file { "/etc/php5/conf.d/memcached.ini":
+  ensure => present,
+  content => template("memcached.ini"),
+  require => Package["php5-fpm", "php5-memcached"],
+  notify => Service["php5-fpm"],
+}
 
 # memcache
 
@@ -196,5 +211,11 @@ package { "memcached":
 }
 service { "memcached":
   ensure => running,
+}
+file { "/etc/memcached.conf":
+  ensure => present,
+  content => template("memcached.conf"),
+  require => Package["memcached"],
+  notify => Service["memcached"],
 }
 
