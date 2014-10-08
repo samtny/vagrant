@@ -1,6 +1,8 @@
 #!/bin/bash
 
-SEMAPHORE=./semaphore
+set -e
+
+SEMAPHORE=./semaphore.bootstrap
 
 if [ ! -f $SEMAPHORE ]; then
   sudo apt-get update

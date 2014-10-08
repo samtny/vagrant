@@ -171,7 +171,7 @@ file { "/etc/security/limits.d/mysql.limits.conf":
 
 # php
 
-package { "php-apc":
+package { ["php-apc", "php-pear"]:
   ensure => latest,
 }
 
@@ -197,6 +197,10 @@ file { "/etc/php5/fpm/php.ini":
 }
 
 # php modules
+
+package { ["php5-dev", "build-essential", "checkinstall"]:
+  ensure => latest,
+}
 
 file { "/etc/php5/conf.d/apc.ini":
   ensure => present,
