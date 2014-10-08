@@ -78,6 +78,9 @@ define drupal7::drupal7site($shortname) {
 
   file { ["/export/${name}", "/export/${name}/files"]:
     ensure => directory,
+    owner => "vagrant",
+    group => "www-data",
+    mode => "2774",
   }
 
   file { ["/export/${name}/settings.php"]:
