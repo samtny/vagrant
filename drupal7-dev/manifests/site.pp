@@ -4,20 +4,40 @@ package { ["vim", "git", "drush"]:
   ensure => latest,
 }
 
-# vagrant
+# export
 
-file { "/share/drupal7-core":
+file { ["/export", "/export/drupal7-common", "/export/drupal7-core", "/export/drupal7-core/docroot", "/export/drupal7-core/docroot/sites"]:
   ensure => directory,
   owner => "vagrant",
   group => "www-data",
-  mode => 2774,
+  mode => "2774",
 }
 
-file { "/share/drupal7-common":
-  ensure => directory,
-  owner => "vagrant",
-  group => "www-data",
-  mode => 2774,
+file { ["/export/drupal7-core/docroot/sites/all"]:
+  ensure => symlink,
+  target => "/export/drupal7-common",
+  require => File["/export/drupal7-core/docroot/sites", "/export/drupal7-common"],
+}
+
+# nfs
+
+package { ["nfs-kernel-server"]:
+  ensure => latest,
+}
+service { ["nfs-kernel-server"]:
+  ensure => running,
+  require => Package["nfs-kernel-server"],
+}
+file { "/etc/exports":
+  ensure => present,
+  content => template("exports"),
+  require => [ File["/export"], Package["nfs-kernel-server"] ],
+  notify => [ Service["nfs-kernel-server"], Exec["exportfs"] ],
+}
+exec { exportfs:
+  path => ["/usr/bin", "/usr/sbin"],
+  command => "exportfs -a",
+  refreshonly => true,
 }
 
 # www
@@ -31,21 +51,10 @@ file { "/var/www":
 
 file { ["/var/www/drupal7-core"]:
   ensure => symlink,
-  target => "/share/drupal7-core",
-  require => File["/var/www", "/share/drupal7-core"],
-}
-
-file { ["/var/www/drupal7-core/docroot", "/var/www/drupal7-core/docroot/sites"]:
-  ensure => directory,
   owner => "vagrant",
   group => "www-data",
-  require => File["/var/www/drupal7-core"],
-}
-
-file { ["/var/www/drupal7-core/docroot/sites/all"]:
-  ensure => symlink,
-  target => "/share/drupal7-common",
-  require => File["/var/www/drupal7-core/docroot/sites", "/share/drupal7-common"],
+  target => "/export/drupal7-core",
+  require => File["/var/www", "/export/drupal7-core"],
 }
 
 # site
@@ -67,30 +76,19 @@ define drupal7::drupal7site($shortname) {
     notify => Service["nginx"],
   }
 
-  file { ["/vagrant/${name}"]:
+  file { ["/export/${name}", "/export/${name}/files"]:
     ensure => directory,
-    owner => "vagrant",
-    group => "www-data",
   }
 
-  file { ["/vagrant/${name}/settings.php"]:
+  file { ["/export/${name}/settings.php"]:
     ensure => present,
     content => template("settings.php.erb"),
-    owner => "vagrant",
-    group => "www-data",
   }
 
-  file { ["/vagrant/${name}/files"]:
-    ensure => directory,
-    owner => "vagrant",
-    group => "www-data",
-    require => File["/vagrant/${name}"],
-  }
-
-  file { ["/var/www/drupal7-core/docroot/sites/${name}"]:
+  file { ["/export/drupal7-core/docroot/sites/${name}"]:
     ensure => symlink,
-    target => "/vagrant/${name}",
-    require => File["/vagrant/${name}", "/var/www/drupal7-core/docroot/sites"],
+    target => "/export/${name}",
+    require => File["/export/${name}", "/export/drupal7-core/docroot/sites"],
   }
 
   mysql_database { "my_ami_${shortname}":
@@ -122,6 +120,10 @@ drupal7::drupal7site { "flexonline.com":
 
 drupal7::drupal7site { "naturalhealthmag.com":
   shortname => "nh",
+}
+
+drupal7::drupal7site { "fitpregnancy.com":
+  shortname => "fp",
 }
 
 # nginx
@@ -215,6 +217,12 @@ file { "/etc/php5/conf.d/memcached.ini":
   ensure => present,
   content => template("memcached.ini"),
   require => Package["php5-fpm", "php5-memcached"],
+  notify => Service["php5-fpm"],
+}
+
+package { "php5-gd":
+  ensure => latest,
+  require => Package["php5-fpm"],
   notify => Service["php5-fpm"],
 }
 

@@ -1,5 +1,3 @@
 .vagrant
-drupal7-core
-drupal7-common
-*.com
+export
 *.sql
