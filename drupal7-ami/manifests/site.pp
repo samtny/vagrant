@@ -1,6 +1,6 @@
 # utils
 
-package { ["vim", "git", "drush"]:
+package { ["vim", "git", "curl", "drush"]:
   ensure => latest,
 }
 
@@ -66,26 +66,34 @@ define drupal7::drupal7site($shortname) {
     group => "root",
     mode => "0644",
     content => template("drupal7site.erb"),
-    require => Package["nginx"],  
+    require => Package["nginx"],
+    notify => Service["nginx"],
   }
 
   file { "/etc/nginx/sites-enabled/local.${name}.conf":
     ensure => symlink,
     target => "/etc/nginx/sites-available/local.${name}.conf",
     require => File["/etc/nginx/sites-available/local.${name}.conf"],
-    notify => Service["nginx"],
   }
 
-  file { ["/export/${name}", "/export/${name}/files"]:
+  file { ["/export/${name}", ]:
     ensure => directory,
     owner => "vagrant",
     group => "www-data",
-    mode => "2774",
+    mode => "2755",
+  }
+
+  file { ["/export/${name}/files"]:
+    ensure => directory,
+    owner => "vagrant",
+    group => "www-data",
+    mode => "2775",
   }
 
   file { ["/export/${name}/settings.php"]:
     ensure => present,
     content => template("settings.php.erb"),
+    mode => 755,
   }
 
   file { ["/export/drupal7-core/docroot/sites/${name}"]:
@@ -114,6 +122,11 @@ define drupal7::drupal7site($shortname) {
     table => "*.*",
     user => "ami_${shortname}@%",
     require => Service["mysql"],
+  }
+
+  file_line { "hosts_${shortname}":
+    path => "/etc/hosts",
+    line => "127.0.0.1  local.${name}",
   }
 }
 
@@ -230,6 +243,12 @@ file { "/etc/php5/conf.d/memcached.ini":
 package { "php5-gd":
   ensure => latest,
   require => Package["php5-fpm"],
+  notify => Service["php5-fpm"],
+}
+
+package { "php5-curl":
+  ensure => latest,
+  require => Package["curl"],
   notify => Service["php5-fpm"],
 }
 
