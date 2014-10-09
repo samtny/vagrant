@@ -221,6 +221,11 @@ file { "/etc/php5/conf.d/apc.ini":
   require => Package["php5-fpm"],
   notify => Service["php5-fpm"],
 }
+file { "/var/www/apc.php":
+  ensure => present,
+  content => template("apc.php"),
+  require => File["/var/www"],
+}
 
 package { "php5-mysql":
   ensure => latest,
