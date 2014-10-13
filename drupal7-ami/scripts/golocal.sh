@@ -12,6 +12,9 @@ drush fra -y
 drush dis acquia_agent -y
 drush dis acquia_purge -y
 
+drush dis apachesolr -y
+drush dis xmlsitemap -y
+
 drush dl devel -y
 drush en devel -y
 
