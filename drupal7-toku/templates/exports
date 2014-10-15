@@ -1,0 +1,1 @@
+/export 192.168.33.1/24(rw,fsid=0,insecure,no_subtree_check,all_squash,async,anonuid=1000,anongid=1000)
