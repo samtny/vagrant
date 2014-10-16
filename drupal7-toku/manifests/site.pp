@@ -138,6 +138,11 @@ define drupal7::drupal7site($shortname) {
     path => "/etc/hosts",
     line => "127.0.0.1  local.${name}",
   }
+
+  file_line { "cd${shortname}":
+    path => "/home/vagrant/.profile",
+    line => "alias cd${shortname}=\"cd /var/www/drupal7-core/docroot/sites/${name}\"",
+  }
 }
 
 drupal7::drupal7site { "flexonline.com":
