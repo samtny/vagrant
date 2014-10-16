@@ -165,6 +165,10 @@ drupal7::drupal7site { "shape.com":
   shortname => "shape",
 }
 
+drupal7::drupal7site { "mensfitness.com":
+  shortname => "mf",
+}
+
 # nginx
 
 user { "nginx":
