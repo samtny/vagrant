@@ -198,10 +198,14 @@ file_line { "hosts_local.ami.drupal7.com":
 service { "mysql":
   ensure => running,
 }
-file { "/etc/my.cnf":
+file { "/etc/mysql/my.cnf":
   ensure => present,
   content => template("my.cnf"),
   notify => Service["mysql"],
+}
+file { "/etc/my.cnf":
+  ensure => symlink,
+  target => "/etc/mysql/my.cnf",
 }
 file { "/etc/security/limits.d/mysql.limits.conf":
   ensure => present,
@@ -248,12 +252,6 @@ file { "/etc/php5/conf.d/apc.ini":
   require => Package["php5-fpm"],
   notify => Service["php5-fpm"],
 }
-file { "/var/www/apc.php":
-  ensure => present,
-  content => template("apc.php"),
-  require => File["/var/www"],
-}
-
 package { "php5-mysql":
   ensure => latest,
   require => Package["php5-fpm"],
@@ -297,5 +295,17 @@ file { "/etc/memcached.conf":
   content => template("memcached.conf"),
   require => Package["memcached"],
   notify => Service["memcached"],
+}
+
+# diagnostics 
+
+file { "/var/www/apc.php":
+  content => template("apc.php"),
+  require => File["/var/www"],
+}
+
+file { "/var/www/realpath.php":
+  content => template("realpath.php"),
+  require => File["/var/www"],
 }
 

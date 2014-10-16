@@ -19,8 +19,11 @@ if [ ! -f $SEMAPHORE ]; then
 
   sudo chown -R mysql:mysql /opt/tokutek/mysql
 
-  sudo cp /vagrant/templates/my.cnf /etc/my.cnf
-
+  sudo mkdir -p /etc/mysql
+  sudo cp /vagrant/templates/my.cnf /etc/mysql/my.cnf
+  #sudo cp /vagrant/templates/my.cnf /etc/my.cnf
+  sudo ln -s /etc/mysql/my.cnf /etc/my.cnf
+  
   cd /opt/tokutek/mysql
   sudo bash scripts/mysql_install_db --user=mysql
 
@@ -28,9 +31,11 @@ if [ ! -f $SEMAPHORE ]; then
   sudo chmod 755 /etc/init.d/mysql
   sudo update-rc.d mysql defaults
 
+  sudo apt-get install -y mysql-client-core-5.5
+  
   sudo service mysql start
 
-  sudo apt-get install -y mysql-client-core-5.5
+  sleep 5
   
   mysql -u root -e "drop user ''@'localhost';"
   
