@@ -1,4 +1,4 @@
-# utils
+# util
 
 package { ["vim", "git", "curl", "drush"]:
   ensure => latest,
@@ -9,6 +9,12 @@ file { "/home/vagrant/bin":
 }
 file { "/home/vagrant/bin/golocal":
   content => template("golocal"),
+  owner => "vagrant",
+  group => "vagrant",
+  mode => 755,
+}
+file { "/home/vagrant/bin/dbload":
+  content => template("dbload"),
   owner => "vagrant",
   group => "vagrant",
   mode => 755,
