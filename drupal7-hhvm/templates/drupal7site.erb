@@ -1,0 +1,75 @@
+server {
+        server_name     local.<%= @name %>;
+        root    /var/www/drupal7-core/docroot;
+
+        gzip_static on;
+
+        client_max_body_size    128M;
+
+        location ^~ /xhprof_html/ {
+                root /usr/share/php;
+                include fastcgi_params;
+                fastcgi_index index.php;
+                fastcgi_param SCRIPT_FILENAME /usr/share/php$fastcgi_script_name;
+                fastcgi_pass    127.0.0.1:9000;
+
+                location ~ ^.*\.(css|js|gif)$ {}
+        }
+
+        location = /favicon.ico {
+                log_not_found off;
+                access_log off;
+        }
+
+        location = /robots.txt {
+                allow all;
+                log_not_found off;
+                access_log off;
+        }
+
+        location ~ \..*/.*\.php$ {
+                return 403;
+        }
+
+        location ~ ^/sites/.*/private {
+                return 403;
+        }
+
+        location ~ (^|/)\. {
+                return 403;
+        }
+
+        location / {
+                try_files       $uri @rewrite;
+        }
+
+        location @rewrite {
+                rewrite ^ /index.php;
+        }
+
+        location ~ \.php$ {
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                include fastcgi_params;
+                fastcgi_param SCRIPT_FILENAME $request_filename;
+                fastcgi_intercept_errors on;
+                fastcgi_pass 127.0.0.1:9000;
+        }
+
+        location ~ ^/sites/.*/files/styles/ {
+                proxy_pass http://www.<%= @name %>;
+        }
+
+        location ~ ^/sites/.*/files/media/ {
+                proxy_pass http://www.<%= @name %>;
+        }
+
+        location ~ ^/sites/.*/files/advagg_* {
+                try_files $uri @rewrite;
+        }
+
+        location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {
+                expires max;
+                log_not_found off;
+        }
+}
+ 
