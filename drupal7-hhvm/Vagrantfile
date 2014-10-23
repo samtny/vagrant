@@ -79,7 +79,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
    config.vm.provision "shell", path: "scripts/bootstrap.sh"
    config.vm.provision "shell", path: "scripts/hhvm.sh"
    config.vm.provision "shell", path: "scripts/toku.sh"
-
+   config.vm.provision "shell", path: "scripts/xhprof_lib.sh"
+   config.vm.provision "shell", path: "scripts/xhprof_html.sh"
+   
   # Enable provisioning with Puppet stand alone.  Puppet manifests
   # are contained in a directory path relative to this Vagrantfile.
   # You will need to create the manifests directory and a manifest in

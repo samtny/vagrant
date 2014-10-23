@@ -8,9 +8,11 @@ DATABASE=my_ami_$SHORTNAME
 USER=ami_$SHORTNAME
 PASSWORD=password
 
-sed -i -e "s/ENGINE=InnoDB/ENGINE=TokuDB/g" /export/$SHORTNAME.sql
+SOURCE_DIR=/var/www
 
-mysql --user="$USER" --password="$PASSWORD" --execute="DROP DATABASE $DATABASE; CREATE DATABASE $DATABASE default character set utf8 default collate utf8_general_ci; use $DATABASE; SET storage_engine=TOKUDB; source /export/$SHORTNAME.sql;"
+sed -i -e "s/ENGINE=InnoDB/ENGINE=TokuDB/g" $SOURCE_DIR/$SHORTNAME.sql
+
+mysql --user="$USER" --password="$PASSWORD" --execute="DROP DATABASE $DATABASE; CREATE DATABASE $DATABASE default character set utf8 default collate utf8_general_ci; use $DATABASE; SET storage_engine=TOKUDB; source $SOURCE_DIR/$SHORTNAME.sql;"
 
 exit 0
 
