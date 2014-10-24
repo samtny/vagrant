@@ -114,6 +114,13 @@ file { ["/var/www", "/var/www/drupal7-core", "/var/www/drupal7-core/docroot", "/
   mode => 2775,
 }
 
+file { ["/var/www/drupal7-core/docroot/install.php"]:
+  content => template("install.php"),
+  owner => "vagrant",
+  group => "www-data",
+  require => File["/var/www/drupal7-core/docroot"],
+}
+
 # nfs
 
 package { ["nfs-kernel-server"]:
@@ -172,6 +179,8 @@ define drupal7::drupal7site($shortname) {
   file { ["/var/www/drupal7-core/docroot/sites/${name}/settings.php"]:
     ensure => present,
     content => template("settings.php.erb"),
+    owner => "vagrant",
+    group => "www-data",
     mode => 755,
     require => File["/var/www/drupal7-core/docroot/sites/${name}"],
   }
