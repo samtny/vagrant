@@ -2,6 +2,8 @@
 
 set -x
 
+sudo service hhvm stop || true
+
 drush cc drush
 
 drush vset -y file_temporary_path '/tmp'
@@ -28,4 +30,6 @@ drush vset -y devel_xhprof_directory '/usr/share/php'
 drush vset -y devel_xhprof_url 'http://<%= ipaddress_eth1 %>/xhprof_html'
 
 drush vset -y views_skip_cache 1
+
+sudo service hhvm start || true
 

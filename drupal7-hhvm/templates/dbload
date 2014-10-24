@@ -10,9 +10,16 @@ PASSWORD=password
 
 SOURCE_DIR=/var/www
 
-sed -i -e "s/ENGINE=InnoDB/ENGINE=TokuDB/g" $SOURCE_DIR/$SHORTNAME.sql
+sudo service hhvm stop || true
 
-mysql --user="$USER" --password="$PASSWORD" --execute="DROP DATABASE $DATABASE; CREATE DATABASE $DATABASE default character set utf8 default collate utf8_general_ci; use $DATABASE; SET storage_engine=TOKUDB; source $SOURCE_DIR/$SHORTNAME.sql;"
+sed -i -e "s/ENGINE=InnoDB/ENGINE=TokuDB/g" $SOURCE_DIR/$SHORTNAME.sql
+sed -i -e 's/INSERT INTO `queue.*$//g' $SOURCE_DIR/$SHORTNAME.sql
+sed -i -e 's/INSERT INTO `ultimate_cron_log.*$//g' $SOURCE_DIR/$SHORTNAME.sql
+sed -i -e 's/INSERT INTO `webform_submitted_data.*$//g' $SOURCE_DIR/$SHORTNAME.sql
+
+mysql --user="$USER" --password="$PASSWORD" --execute="SET unique_checks=OFF; SET tokudb_commit_sync=OFF; DROP DATABASE $DATABASE; CREATE DATABASE $DATABASE default character set utf8 default collate utf8_general_ci; use $DATABASE; SET storage_engine=TOKUDB; source $SOURCE_DIR/$SHORTNAME.sql;"
+
+sudo service hhvm start || true
 
 exit 0
 
