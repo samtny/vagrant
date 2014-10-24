@@ -11,6 +11,8 @@ if [ ! -f $SEMAPHORE ]; then
   sudo apt-get update
   sudo apt-get install -y hhvm
 
+  sudo update-rc.d hhvm defaults
+
   sudo /usr/bin/update-alternatives --install /usr/bin/php php /usr/bin/hhvm 60
 
   touch $SEMAPHORE
