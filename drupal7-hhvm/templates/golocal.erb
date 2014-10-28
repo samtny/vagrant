@@ -27,7 +27,7 @@ drush vset -y preprocess_js 0
 drush dl xhprof -y
 drush en xhprof -y
 drush vset -y devel_xhprof_directory '/usr/share/php'
-drush vset -y devel_xhprof_url 'http://<%= ipaddress_eth1 %>/xhprof_html'
+drush vset -y devel_xhprof_url 'http://<%= ipaddress_eth1 %>/xhprof_html/'
 
 drush vset -y views_skip_cache 1
 
