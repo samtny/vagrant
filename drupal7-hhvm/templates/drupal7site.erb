@@ -65,6 +65,7 @@ server {
         }
 
         location ~ ^/sites/.*/files/advagg_* {
+                expires max;
                 try_files $uri @rewrite;
         }
 
