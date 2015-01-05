@@ -1,0 +1,6 @@
+---
+- name: Install npm
+  yum: name=npm state=present
+
+- name: Install gulp
+  npm: name=gulp global=yes

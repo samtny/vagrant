@@ -1,0 +1,4 @@
+---
+- name: Create /opt/app
+  file: path=/opt/app state=directory owner=root group=nginx mode=2755
+

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+DIR_LOCAL=`dirname $0`/export/app
+
+sudo umount -f -l $DIR_LOCAL
+

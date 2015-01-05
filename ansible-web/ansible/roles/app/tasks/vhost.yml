@@ -1,0 +1,5 @@
+---
+- name: Write app.conf vhost file
+  template: src=app.conf.j2 dest=/etc/nginx/conf.d/app.conf owner=root group=root mode=0644
+  notify:
+    - Reload nginx

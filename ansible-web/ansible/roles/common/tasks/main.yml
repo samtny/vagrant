@@ -1,0 +1,9 @@
+---
+- name: Install vim
+  yum: name=vim state=present
+  tags: vim
+  remote_user: root
+
+- name: Install libselinux-python
+  yum: name=libselinux-python state=present
+  tags: libselinux-python

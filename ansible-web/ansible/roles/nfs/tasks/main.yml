@@ -1,0 +1,10 @@
+---
+- name: Install nfs
+  yum: name={{ item }} state=present
+  with_items:
+    - nfs-utils
+    - portmap
+    - nfs4-acl-tools
+
+- name: Ensure nfs starts on boot
+  service: name=nfs state=started enabled=yes

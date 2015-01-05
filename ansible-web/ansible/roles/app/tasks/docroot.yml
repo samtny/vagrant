@@ -1,0 +1,7 @@
+---
+- name: Create /var/www/app
+  file: path=/var/www/app state=directory owner=root group=nginx mode=2755
+
+- name: Link /var/www/app/docroot
+  file: src=/opt/app/src/main dest=/var/www/app/docroot state=link
+

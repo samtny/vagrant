@@ -1,0 +1,10 @@
+---
+- name: Download tomcat8
+  get_url: url=http://mirror.nexcess.net/apache/tomcat/tomcat-8/v8.0.15/bin/apache-tomcat-8.0.15.tar.gz dest=/tmp/apache-tomcat-8.0.15.tar.gz
+
+- name: Unzip tomcat8
+  unarchive: src=/tmp/apache-tomcat-8.0.15.tar.gz dest=/opt copy=no creates=/opt/apache-tomcat-8.0.15/lib/catalina.jar
+
+- name: Symlink /opt/tomcat8
+  file: src=/opt/apache-tomcat-8.0.15 dest=/opt/tomcat8 state=link
+

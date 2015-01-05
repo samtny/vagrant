@@ -1,0 +1,28 @@
+- name: apply common configuration to all nodes
+  hosts: all
+  remote_user: root
+
+  roles:
+    - common
+
+- name: configure and deploy the webservers and application code
+  hosts: webservers
+  remote_user: root
+
+  roles:
+    - app
+
+- name: configure developer tools
+  hosts: devtools
+  remote_user: root
+
+  roles:
+    - devtools
+
+- name: configure exports
+  hosts: exports
+  remote_user: root
+
+  roles:
+    - exports
+

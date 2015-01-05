@@ -1,0 +1,18 @@
+---
+- name: Download maven
+  get_url: url=http://www.eng.lsu.edu/mirrors/apache/maven/maven-3/3.2.3/binaries/apache-maven-3.2.3-bin.zip dest=/tmp/apache-maven-3.2.3-bin.zip
+
+- name: Install unzip
+  yum: name=unzip state=present
+
+- name: Unzip maven
+  unarchive: src=/tmp/apache-maven-3.2.3-bin.zip dest=/opt copy=no creates=/opt/apache-maven-3.2.3/bin/mvn
+
+- name: Symlink /opt/maven
+  file: src=/opt/apache-maven-3.2.3 dest=/opt/maven state=link
+
+- name: Symlink /usr/local/bin/mvn
+  file: src=/opt/apache-maven-3.2.3/bin/mvn dest=/usr/local/bin/mvn state=link
+
+- name: Install maven.sh
+  template: src=maven.sh.j2 dest=/etc/profile.d/maven.sh owner=root group=root mode=0655
