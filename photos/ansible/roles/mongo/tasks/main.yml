@@ -1,0 +1,9 @@
+---
+- name: Add mongo apt key
+  apt_key: keyserver=hkp://keyserver.ubuntu.com:80 id=7F0CEB10
+
+- name: Add mongo repo
+  apt_repository: repo='deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' state=present
+
+- name: Install mongo
+  apt: name=mongodb-org=2.6.6 state=present

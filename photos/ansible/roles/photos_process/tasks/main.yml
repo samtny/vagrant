@@ -1,0 +1,6 @@
+---
+- name: Install libav-tools
+  apt: name=libav-tools state=present
+
+  name: Install imagemagick
+  apt: name=imagemagick state=present
