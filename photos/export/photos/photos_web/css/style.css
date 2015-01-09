@@ -1,0 +1,78 @@
+body {
+
+}
+
+.navbar {
+  margin-bottom: 10px;
+}
+
+span.folder-toggle {
+  cursor: pointer;
+}
+
+span.folder-name {
+  cursor: pointer;
+}
+
+div.folder-children {
+  margin-left: 1em;
+}
+
+div.folders-wrapper, div.resources-wrapper {
+  overflow-y: auto;
+}
+
+div.resources {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+div.resource {
+  position: relative;
+  float: left;
+  border: 1px solid transparent;
+  margin: 2px;
+  width: 210px;
+  height: 210px;
+  padding: 4px;
+  text-align: center;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+div.resource.selected {
+  border-color: blue;
+}
+
+div.resource:hover:not(.selected) {
+  border-color: lightblue;
+}
+
+div.resource span {
+  position: absolute;
+  bottom: 0;
+  opacity: 0;
+}
+
+div.resource:hover span {
+  opacity: 1;
+}
+
+.preview-wrapper {
+  text-align: center;
+}
+
+.preview {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

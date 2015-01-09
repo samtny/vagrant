@@ -1,0 +1,6 @@
+---
+- name: Install nfs
+  apt: name=nfs-kernel-server state=present
+
+- name: Ensure nfs starts on boot
+  service: name=nfs-kernel-server state=started enabled=yes

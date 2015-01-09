@@ -21,8 +21,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     photos.vm.provision "ansible" do |ansible|
       ansible.groups = {
-        "photos_process" => [ "photos" ],
         "mongo" => [ "photos" ],
+        "photos_process" => [ "photos" ],
+        "photos_web_dev" => [ "photos" ],
         "devtools" => [ "photos" ],
       }
 

@@ -1,0 +1,10 @@
+---
+- name: Install nginx
+  apt: name=nginx state=present
+
+- name: Create /var/www
+  file: path=/var/www state=directory owner=root group=www-data mode=2775
+
+- name: Modify default nginx site
+  template: src=default.j2 dest=/etc/nginx/sites-available/default owner=root group=root mode=0644
+  notify: Reload nginx

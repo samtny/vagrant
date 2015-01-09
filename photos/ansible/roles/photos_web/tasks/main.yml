@@ -1,0 +1,14 @@
+---
+- name: Create /opt/photos/photos_web
+  file: path=/opt/photos/photos_web state=directory owner=vagrant group=vagrant mode=2775
+
+- name: Create /var/www/photos_web symlink
+  file: src=/opt/photos/photos_web dest=/var/www/photos_web state=link owner=vagrant group=www-data
+
+- name: Create photos_web vhost entry
+  template: src=photos_web.j2 dest=/etc/nginx/sites-available/photos_web owner=root group=root mode=644
+  notify: Reload nginx
+
+- name: Enable photos_web vhost
+  file: src=/etc/nginx/sites-available/photos_web dest=/etc/nginx/sites-enabled/photos_web state=link owner=root group=root mode=644
+  notify: Reload nginx

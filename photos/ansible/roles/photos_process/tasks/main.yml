@@ -1,6 +1,12 @@
 ---
-- name: Install libav-tools
-  apt: name=libav-tools state=present
+#- name: Install libav-tools
+#  apt: name=libav-tools state=absent
 
-  name: Install imagemagick
+#- name: Install ffmpeg ppa repo
+#  apt_repository: repo='ppa:mc3man/trusty-media'
+
+#- name: Install ffpmeg
+#  apt: name=ffmpeg state=present
+
+- name: Install imagemagick
   apt: name=imagemagick state=present

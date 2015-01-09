@@ -1,0 +1,7 @@
+---
+- name: Restart nfs
+  service: name=nfs-kernel-server state=restarted
+  notify: Execute mountfs
+
+- name: Execute mountfs
+  command: /usr/sbin/exportfs -a

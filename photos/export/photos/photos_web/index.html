@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Photos</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/lib/require.js"></script>
+    <script>
+      require(['./js/common'], function (common) {
+        require(['app/main']);
+      });
+    </script>
+  </head>
+  <body data-bind="pageTitle: title">
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Photos</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Add</a></li>
+          </ul>
+          <form data-bind="submit: function () { return false; }" class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+              <input data-bind="event: { keyup: $root.searchKeyUp, keyupBubble: false }" type="text" class="form-control" placeholder="Filter">
+            </div>
+          </form>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Separated link</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="folders-wrapper hidden-xs col-md-2">
+          <div class="folders" data-bind="foreach: folders">
+            <!-- ko template: { name: 'folder-template' } --><!-- /ko -->
+          </div>
+        </div>
+        <div class="resources-wrapper col-xs-12" data-bind="css: { 'col-md-4': preview(), 'col-md-10': !preview() }">
+          <div class="resources" data-bind="foreach: resources">
+            <!-- ko template: { name: 'resource-template' } --><!-- /ko -->
+          </div>
+        </div>
+        <div class="preview-wrapper hidden" data-bind="css: { 'col-md-6': preview(), hidden: !preview() }">
+          <!-- ko template: { name: 'preview-template' } --><!-- /ko -->
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script type="text/html" id="folder-template">
+  <div class="folder">
+    <span class="folder-toggle" data-bind="visible: children().length, text: children().length ? (expanded() ? '-' : '+') : '', event: { click: toggleExpanded }"></span>
+    <span class="folder-name" data-bind="text: name, event: { click: $root.folderClick }"></span>
+    <div data-bind="visible: expanded">
+      <div class="folder-children" data-bind="foreach: children">
+        <!-- ko template: { name: 'folder-template' } --><!-- /ko -->
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/html" id="resource-template">
+  <div class="resource noselect" data-bind="event: { click: $root.resourceClick }, css: { selected: selected() }">
+    <img data-bind="attr: { src: src, alt: alt }" class="img" draggable="false" width="200px" height="200px" />
+    <span data-bind="text: name"></span>
+  </div>
+</script>
+
+<script type="text/html" id="preview-template">
+  <div class="preview noselect" data-bind="with: preview">
+    <img data-bind="attr: { src: src, alt: alt }" class="img" draggable="false" />
+  </div>
+</script>

@@ -19,6 +19,20 @@
   roles:
     - mongo
 
+- name: configure and deploy web
+  hosts: photos_web
+  remote_user: root
+
+  roles:
+    - photos_web
+
+- name: configure and deploy web dev
+  hosts: photos_web_dev
+  remote_user: root
+
+  roles:
+    - photos_web_dev
+
 - name: add devtools
   hosts: devtools
   remote_user: root
