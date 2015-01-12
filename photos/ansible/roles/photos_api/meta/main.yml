@@ -1,4 +1,6 @@
 ---
 dependencies:
+  - { role: php }
+  - { role: composer }
   - { role: nginx }
   - { role: exports }

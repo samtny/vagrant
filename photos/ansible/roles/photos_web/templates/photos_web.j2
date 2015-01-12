@@ -2,7 +2,7 @@ server {
 	root /var/www/photos_web;
 	index index.html index.htm;
 
-	server_name local.photos.com;
+	server_name *.web.photos.com;
 
 	location / {
 		try_files $uri $uri/ /index.html;

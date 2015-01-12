@@ -6,9 +6,33 @@
   file: src=/opt/photos/photos_api dest=/var/www/photos_api state=link owner=vagrant group=www-data
 
 - name: Create photos_api vhost entry
-  template: src=photos_api.j2 dest=/etc/nginx/sites-available/photos_api owner=root group=root mode=644
+  template: src=photos_api.j2 dest=/etc/nginx/sites-available/photos_api owner=root group=root mode=0644
   notify: Reload nginx
 
 - name: Enable photos_api vhost
-  file: src=/etc/nginx/sites-available/photos_api dest=/etc/nginx/sites-enabled/photos_api state=link owner=root group=root mode=644
+  file: src=/etc/nginx/sites-available/photos_api dest=/etc/nginx/sites-enabled/photos_api state=link owner=root group=root mode=0644
   notify: Reload nginx
+
+- name: Create photos_api composer.json
+  template: src=composer.json dest=/opt/photos/photos_api/composer.json owner=vagrant group=vagrant mode=0664
+
+- name: Create php-mongo installer script
+  template: src=install_php_mongo.sh dest=/home/vagrant/install_php_mongo.sh owner=vagrant group=vagrant mode=0755
+
+- name: Install php-pear
+  apt: name=php-pear state=present
+
+- name: Install php5-dev
+  apt: name=php5-dev state=present
+
+- name: Instal make
+  apt: name=make state=present
+
+- name: Install php-mongo
+  shell: /home/vagrant/install_php_mongo.sh creates=/usr/lib/php5/20090626/mongo.so
+
+- name: Create php-mongo mongo.ini
+  template: src=mongo.ini dest=/etc/php5/conf.d/mongo.ini owner=root group=root mode=0644
+
+- name: Install photos_api composer dependencies
+  composer: command=install working_dir=/opt/photos/photos_api

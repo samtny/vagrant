@@ -1,0 +1,20 @@
+---
+- name: Install php5-fpm
+  apt: name=php5-fpm state=present
+
+- name: Install php5-cli
+  apt: name=php5-cli state=present
+
+- name: Ensure php.ini
+  template: src=php.ini dest=/etc/php5/fpm/php.ini owner=root group=root mode=0644
+  notify: Restart php
+
+- name: Ensure www.conf
+  template: src=www.conf dest=/etc/php5/fpm/pool.d/www.conf owner=root group=root mode=0644
+  notify: Restart php
+
+- name: Install php5-curl
+  apt: name=php5-curl state=present
+
+- name: Ensure php5-fpm state
+  service: name=php5-fpm state=started
