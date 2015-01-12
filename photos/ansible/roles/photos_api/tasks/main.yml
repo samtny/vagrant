@@ -1,0 +1,14 @@
+---
+- name: Create /opt/photos/photos_api
+  file: path=/opt/photos/photos_api state=directory owner=vagrant group=vagrant mode=2775
+
+- name: Create /var/www/photos_api symlink
+  file: src=/opt/photos/photos_api dest=/var/www/photos_api state=link owner=vagrant group=www-data
+
+- name: Create photos_api vhost entry
+  template: src=photos_api.j2 dest=/etc/nginx/sites-available/photos_api owner=root group=root mode=644
+  notify: Reload nginx
+
+- name: Enable photos_api vhost
+  file: src=/etc/nginx/sites-available/photos_api dest=/etc/nginx/sites-enabled/photos_api state=link owner=root group=root mode=644
+  notify: Reload nginx

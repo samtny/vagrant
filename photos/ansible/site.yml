@@ -5,13 +5,6 @@
   roles:
     - common
 
-- name: configure and deploy photo processing
-  hosts: photos_process
-  remote_user: root
-
-  roles:
-    - photos_process
-
 - name: configure and deploy mongodb
   hosts: mongo
   remote_user: root
@@ -19,23 +12,23 @@
   roles:
     - mongo
 
+- name: configure and deploy api
+  hosts: photos_api
+  remote_user: root
+
+  roles:
+    - photos_api
+
+- name: configure and deploy process
+  hosts: photos_process
+  remote_user: root
+
+  roles:
+    - photos_process
+
 - name: configure and deploy web
   hosts: photos_web
   remote_user: root
 
   roles:
     - photos_web
-
-- name: configure and deploy web dev
-  hosts: photos_web_dev
-  remote_user: root
-
-  roles:
-    - photos_web_dev
-
-- name: add devtools
-  hosts: devtools
-  remote_user: root
-
-  roles:
-    - devtools

@@ -22,9 +22,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     photos.vm.provision "ansible" do |ansible|
       ansible.groups = {
         "mongo" => [ "photos" ],
+        "photos_api" => [ "photos" ],
         "photos_process" => [ "photos" ],
-        "photos_web_dev" => [ "photos" ],
-        "devtools" => [ "photos" ],
+        "photos_web" => [ "photos" ],
       }
 
       ansible.playbook = "ansible/site.yml"

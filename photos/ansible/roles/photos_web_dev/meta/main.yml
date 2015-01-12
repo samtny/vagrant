@@ -1,4 +1,0 @@
----
-dependencies:
-  - { role: photos_web }
-  - { role: devtools }
