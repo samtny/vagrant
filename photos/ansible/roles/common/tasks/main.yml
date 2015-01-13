@@ -1,6 +1,0 @@
----
-- name: Install vim
-  apt: name=vim state=present
-
-- name: Install curl
-  apt: name=curl state=present

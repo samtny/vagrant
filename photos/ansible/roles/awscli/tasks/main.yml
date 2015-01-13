@@ -1,6 +1,0 @@
----
-- name: install python-pip
-  apt: name=python-pip state=present
-
-- name: install awscli
-  pip: name=awscli
