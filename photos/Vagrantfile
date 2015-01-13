@@ -12,6 +12,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     photos.vm.hostname = "photos"
 
     photos.vm.network "private_network", ip: "192.168.35.10"
+    photos.vm.network "forwarded_port", guest: 443, host: 4430
  
     photos.vm.provider "virtualbox" do |vb|
       vb.customize ["modifyvm", :id, "--memory", "1024"]
